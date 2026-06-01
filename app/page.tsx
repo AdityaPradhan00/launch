@@ -152,8 +152,8 @@ export default function Page() {
           {/* CTA Button */}
           <motion.div variants={itemVariants}>
             <a
-              href="#"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-amber-500/50"
+              href="https://cooperative.sikkim.gov.in"
+              className="inline-flex items-center px-8 py-3 cursor-pointer bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-amber-500/50"
             >
               Enter Portal
               <svg
