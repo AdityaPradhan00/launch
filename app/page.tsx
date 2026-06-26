@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Confetti from '@/components/confetti'
 
+// Curtain animation easing: slow start, accelerate, ease into finish
+const curtainEasing = [0.25, 0.46, 0.45, 0.94]
+
 export default function Page() {
   const [isLaunched, setIsLaunched] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -12,10 +15,8 @@ export default function Page() {
 
   const handleLaunch = () => {
     audioRef.current?.play()
-
     setIsLaunched(true)
     setShowConfetti(true)
-
   }
 
   const containerVariants = {
@@ -24,7 +25,7 @@ export default function Page() {
       opacity: 1,
       transition: {
         staggerChildren: 0.65,
-        delayChildren: 3.8,
+        delayChildren: 3.42, // 90% of 3.8s + content fade delay
       },
     },
   }
@@ -93,50 +94,109 @@ export default function Page() {
         </main>
       )}
 
-      {/* Launch Screen with Curtain Animation */}
+      {/* Launch Screen with Theatre Curtain Animation */}
       {isLaunched && (
         <>
-          {/* Left Half of bg1 */}
-          {/* Left Half */}
+          {/* Left Curtain */}
           <motion.div
             className="fixed top-0 left-0 h-screen w-1/2 z-40 overflow-hidden"
-            initial={{ x: 0 }}
-            animate={{ x: '-100%' }}
+            initial={{ scaleX: 1, x: 0 }}
+            animate={{ scaleX: 0, x: '-10%' }}
             transition={{
               duration: 3.8,
-              ease: [0.65, 0, 0.35, 1],
+              ease: curtainEasing,
+            }}
+            style={{
+              transformOrigin: 'right center',
+              perspective: 1000,
             }}
           >
-            <div
-              className="h-full w-screen"
+            <motion.div
+              className="h-full w-screen relative"
               style={{
                 backgroundImage: 'url(/bg1.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
               }}
-            />
+              initial={{ x: 0 }}
+              animate={{
+                x: [0, -8, -4, -6, 0],
+              }}
+              transition={{
+                duration: 3.8,
+                ease: curtainEasing,
+                times: [0, 0.3, 0.5, 0.7, 1],
+              }}
+            >
+              {/* Fabric fold lines for left curtain */}
+              <div className="absolute inset-0 opacity-20">
+                <svg className="w-full h-full" preserveAspectRatio="none">
+                  <defs>
+                    <pattern id="folds-left" patternUnits="userSpaceOnUse" width="40" height="100%">
+                      <line x1="20" y1="0" x2="20" y2="100%" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
+                      <line x1="25" y1="0" x2="25" y2="100%" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#folds-left)" />
+                </svg>
+              </div>
+
+              {/* Center seam shadow */}
+              <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-black/40 via-black/20 to-black/40" />
+            </motion.div>
           </motion.div>
 
-          {/* Right Half */}
+          {/* Right Curtain */}
           <motion.div
             className="fixed top-0 right-0 h-screen w-1/2 z-40 overflow-hidden"
-            initial={{ x: 0 }}
-            animate={{ x: '100%' }}
+            initial={{ scaleX: 1, x: 0 }}
+            animate={{ scaleX: 0, x: '10%' }}
             transition={{
               duration: 3.8,
-              ease: [0.65, 0, 0.35, 1],
+              ease: curtainEasing,
+            }}
+            style={{
+              transformOrigin: 'left center',
+              perspective: 1000,
             }}
           >
-            <div
-              className="h-full w-screen -translate-x-1/2"
+            <motion.div
+              className="h-full w-screen relative -translate-x-1/2"
               style={{
                 backgroundImage: 'url(/bg1.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
+                backgroundAttachment: 'fixed',
               }}
-            />
+              initial={{ x: 0 }}
+              animate={{
+                x: [0, 8, 4, 6, 0],
+              }}
+              transition={{
+                duration: 3.8,
+                ease: curtainEasing,
+                times: [0, 0.3, 0.5, 0.7, 1],
+              }}
+            >
+              {/* Fabric fold lines for right curtain */}
+              <div className="absolute inset-0 opacity-20">
+                <svg className="w-full h-full" preserveAspectRatio="none">
+                  <defs>
+                    <pattern id="folds-right" patternUnits="userSpaceOnUse" width="40" height="100%">
+                      <line x1="20" y1="0" x2="20" y2="100%" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
+                      <line x1="15" y1="0" x2="15" y2="100%" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#folds-right)" />
+                </svg>
+              </div>
+
+              {/* Center seam shadow */}
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-black/40 via-black/20 to-black/40" />
+            </motion.div>
           </motion.div>
           <motion.main
             initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
