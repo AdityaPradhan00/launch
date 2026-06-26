@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Confetti from '@/components/confetti'
 
-// Curtain animation easing: slow start, accelerate, ease into finish
-const curtainEasing = [0.25, 0.46, 0.45, 0.94]
+// Curtain animation easing: matches the specified curve
+const curtainEasing = [0.65, 0, 0.35, 1]
 
 export default function Page() {
   const [isLaunched, setIsLaunched] = useState(false)
@@ -100,34 +100,33 @@ export default function Page() {
           {/* Left Curtain */}
           <motion.div
             className="fixed top-0 left-0 h-screen w-1/2 z-40 overflow-hidden"
-            initial={{ scaleX: 1, x: 0 }}
-            animate={{ scaleX: 0, x: '-10%' }}
+            initial={{ x: 0 }}
+            animate={{ x: '-100%' }}
             transition={{
               duration: 3.8,
               ease: curtainEasing,
             }}
             style={{
-              transformOrigin: 'right center',
-              perspective: 1000,
+              perspective: 1200,
             }}
           >
             <motion.div
-              className="h-full w-screen relative"
+              className="h-full w-full relative"
               style={{
                 backgroundImage: 'url(/bg1.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
-                backgroundAttachment: 'fixed',
               }}
-              initial={{ x: 0 }}
+              initial={{ rotateY: 0, y: 0 }}
               animate={{
-                x: [0, -8, -4, -6, 0],
+                rotateY: [-3, 0],
+                y: [0, -3, 2, -2, 0],
               }}
               transition={{
                 duration: 3.8,
                 ease: curtainEasing,
-                times: [0, 0.3, 0.5, 0.7, 1],
+                times: [0, 1],
               }}
             >
               {/* Fabric fold lines for left curtain */}
@@ -143,42 +142,41 @@ export default function Page() {
                 </svg>
               </div>
 
-              {/* Center seam shadow */}
-              <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-black/40 via-black/20 to-black/40" />
+              {/* Inner edge shadow for depth */}
+              <div className="absolute top-0 right-0 w-8 h-full bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none" />
             </motion.div>
           </motion.div>
 
           {/* Right Curtain */}
           <motion.div
             className="fixed top-0 right-0 h-screen w-1/2 z-40 overflow-hidden"
-            initial={{ scaleX: 1, x: 0 }}
-            animate={{ scaleX: 0, x: '10%' }}
+            initial={{ x: 0 }}
+            animate={{ x: '100%' }}
             transition={{
               duration: 3.8,
               ease: curtainEasing,
             }}
             style={{
-              transformOrigin: 'left center',
-              perspective: 1000,
+              perspective: 1200,
             }}
           >
             <motion.div
-              className="h-full w-screen relative -translate-x-1/2"
+              className="h-full w-full relative"
               style={{
                 backgroundImage: 'url(/bg1.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
-                backgroundAttachment: 'fixed',
               }}
-              initial={{ x: 0 }}
+              initial={{ rotateY: 0, y: 0 }}
               animate={{
-                x: [0, 8, 4, 6, 0],
+                rotateY: [3, 0],
+                y: [0, -3, 2, -2, 0],
               }}
               transition={{
                 duration: 3.8,
                 ease: curtainEasing,
-                times: [0, 0.3, 0.5, 0.7, 1],
+                times: [0, 1],
               }}
             >
               {/* Fabric fold lines for right curtain */}
@@ -194,8 +192,8 @@ export default function Page() {
                 </svg>
               </div>
 
-              {/* Center seam shadow */}
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-black/40 via-black/20 to-black/40" />
+              {/* Inner edge shadow for depth */}
+              <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-l from-transparent via-black/20 to-transparent pointer-events-none" />
             </motion.div>
           </motion.div>
           <motion.main
