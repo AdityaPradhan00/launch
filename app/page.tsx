@@ -371,7 +371,7 @@ export default function Page() {
                 variants={titleVariants}
                 className="mt-3 text-3xl md:text-4xl font-bold text-white"
               >
-                Prem Singh Tamang (Golay)
+                Shri Prem Singh Tamang (Golay)
               </motion.h2>
 
               {/* Date & Venue */}
